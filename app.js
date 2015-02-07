@@ -52,18 +52,32 @@ router.post('/register', function (req, res) {
   });
 });
 
-router.get('/api/players', function (req, res) {
-  Games.getLatestGameId(function (err, game_id) {
-    Games.getCurrentPlayers(function (err, results) {
-      var players = results.rows.map(function (row) {
-        return row.username;
-      });
-      var data = {
-        game_id: game_id,
-        players: players
-      };
+router.post('/api/diamond', function (req, res) {
+  console.log(req.body);
+  res.sendStatus(200);
+});
 
-      res.json(data);
+router.get('/api/players/:username', function (req, res) {
+  var username = req.params.username;
+
+  Games.getLatestGameId(function (err, game_id) {
+    Games.getParticipants(game_id, function (err, results) {
+      if (err) return res.status(500).json({err: err});
+      var players = results.rows || [];
+
+      var player = players.filter(function (p) {
+        return p.username === username;
+      })[0];
+
+      if (!player) {
+        return res.sendStatus(404);
+      }
+
+      if (player.complete !== true) {
+        return res.sendStatus(402);
+      }
+
+      res.sendStatus(200);
     });
   });
 });

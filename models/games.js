@@ -51,11 +51,6 @@ exports.getLatestGameId = function (cb) {
 	});
 };
 
-exports.getCurrentPlayers = function (cb) {
-  var query = 'SELECT username FROM users JOIN games_users ON games_users.user_id = users.id WHERE games_users.game_id = (SELECT id AS game_id FROM games WHERE games.winner IS NULL ORDER BY id DESC LIMIT 1)';
-	db.query(query, [], cb);
-};
-
 exports.getParticipants = function (id, cb) {
   var query = 'SELECT username, complete FROM users JOIN addresses ON users.id = addresses.user_id WHERE addresses.game_id = $1';
   db.query(query, [id], cb);

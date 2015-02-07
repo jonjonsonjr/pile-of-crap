@@ -178,7 +178,3 @@ function generateKeyPair(user_id, game_id, cb) {
 function sendBTC(source_addresses, destination_address) {
   console.log('send btc to ' + destination_address);
 }
-
-function generateQRCode(address, cb) {
-
-}

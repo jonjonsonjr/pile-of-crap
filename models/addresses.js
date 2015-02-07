@@ -94,6 +94,24 @@ exports.getIncompleteByUser = function (id, cb) {
   });
 };
 
+exports.checkRegistration = function (user_id, game_id, cb) {
+  var query = 'SELECT public, complete FROM addresses WHERE user_id = $1 AND game_id = $2';
+	db.query(query, [user_id, game_id], function (err, results) {
+    if (err) return cb(err);
+
+    var transactions = [];
+
+    if (results.rows.length !== 0) {
+      transactions = results.rows.map(function (r) {
+        r.address = bitcore.PublicKey.fromString(r.public).toAddress().toString();
+        return r;
+      });
+    }
+
+    cb(null, transactions);
+  });
+};
+
 exports.markComplete = function (id, cb) {
 	var params = [id];
 	var query = 'UPDATE addresses SET complete = true WHERE id = $1';

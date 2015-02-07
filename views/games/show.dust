@@ -13,7 +13,7 @@
         <tr><th>Username</th><th>Paid?</th></tr>
         {#rows}
           <tr>
-            <td>{username}</td>
+            <td><a href="/users/{username}">{username}</a></td>
             <td>{complete}</td>
           </tr>
         {/rows}

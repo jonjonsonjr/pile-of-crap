@@ -51,9 +51,12 @@ exports.show = function (req, res) {
     var user = results.rows[0];
 
     Addresses.getIncompleteByUser(user.id, function (err, transactions) {
-      user.transactions = {
-        rows: transactions
-      };
+      if (transactions.length > 0) {
+        user.transactions = {
+          rows: transactions
+        };
+      }
+
       res.render('users/show.dust', user);
     });
 	});

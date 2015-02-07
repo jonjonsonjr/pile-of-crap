@@ -4,5 +4,6 @@
       <h2>Payment</h2>
       <hr>
       <p>Send <strong>{cost}</strong> BTC to the following address: <code>{address}</code></p>
+      <div class="text-center"><img src="{img}"></div>
     </div>
 {/content}

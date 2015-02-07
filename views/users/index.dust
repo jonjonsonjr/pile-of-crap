@@ -1,9 +1,6 @@
 {>layout/}
 {<content}
   <h2>Users</h2>
-  <p>
-  <a href="/users/new" class="btn btn-default">Create New User</a>
-  </p>
   <table class="table table-striped">
     <tr>
       <th>Username</th>

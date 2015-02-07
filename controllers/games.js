@@ -68,9 +68,11 @@ exports.show = function (req, res) {
         return r;
       });
 
-      game.participants = {
-        rows: participants
-      };
+      if (participants.length > 0) {
+        game.participants = {
+          rows: participants
+        };
+      }
 
       res.render('games/show.dust', game);
     });

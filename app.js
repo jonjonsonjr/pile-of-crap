@@ -1,4 +1,5 @@
 var bitcore = require('bitcore');
+var qrcode = require('express-qrcode');
 var express = require('express');
 var dust = require('dustjs-linkedin');
 var cons = require('consolidate');
@@ -18,6 +19,7 @@ app.set('view engine', 'dustjs-linkedin');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(qrcode);
 
 router.get('/', function (req, res) {
   res.render('users/new.dust');
@@ -27,25 +29,42 @@ router.post('/register', function (req, res) {
   var user_id = parseInt(req.body.id);
 
   Games.getLatestGameId(function (err, game_id) {
-    Addresses.getIncompleteByUser(user_id, function (err, incomplete) {
+    Addresses.checkRegistration(user_id, game_id, function (err, transactions) {
 
-      var addresses = incomplete.filter(function (r) {
-        return r.game_id === game_id;
-      });
+      var complete = transactions.filter(function (r) { return r.complete === true; });
+      var incomplete = transactions.filter(function (r) { return r.complete !== true; });
 
-      if (addresses.length !== 0) {
+      if (complete.length !== 0) {
+        return res.redirect('/games/' + game_id);
+      }
+
+      var qrcode = req.qrcode();
+      qrcode.setDimension(200,200);
+      qrcode.setCharset('UTF-8');
+      qrcode.setCorrectionLevel('L', 0);
+
+      if (incomplete.length !== 0) {
+        var address = incomplete[0].address;
+        qrcode.setData(address);
+        var image = qrcode.getImage();
+
         return res.render('register.dust', {
-          address: addresses[0].address,
-          cost: COST_BTC
+          address: address,
+          cost: COST_BTC,
+          img: image
         });
       }
 
       generateKeyPair(user_id, game_id, function (err, address) {
         if (err) return console.log(err);
 
+        qrcode.setData(address);
+        var image = qrcode.getImage();
+
         return res.render('register.dust', {
           address: address,
-          cost: COST_BTC
+          cost: COST_BTC,
+          img: image
         });
       });
     });
@@ -158,4 +177,8 @@ function generateKeyPair(user_id, game_id, cb) {
 
 function sendBTC(source_addresses, destination_address) {
   console.log('send btc to ' + destination_address);
+}
+
+function generateQRCode(address, cb) {
+
 }

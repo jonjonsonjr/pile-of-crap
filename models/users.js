@@ -11,17 +11,6 @@ exports.get = function (id, cb) {
 	});
 };
 
-exports.getByUsername = function (username, cb) {
-	var query = 'SELECT users.id AS id, users.username AS username , users.address AS address , users.capital_one AS capital_one   FROM users  WHERE users.username = $1';
-	db.query(query, [username], function (err, result) {
-		if (err) {
-			return cb(err);
-		}
-
-		cb(null, result);
-	});
-};
-
 exports.getAll = function (start, end, cb) {
   start = 0;
   end = 100;
@@ -74,4 +63,9 @@ exports.destroy = function (id, cb) {
 
 		cb(null, result);
 	});
+};
+
+exports.getByUsername = function (username, cb) {
+	var query = 'SELECT users.id AS id, users.username AS username , users.address AS address , users.capital_one AS capital_one   FROM users  WHERE users.username = $1';
+	db.query(query, [username], cb);
 };

@@ -15,12 +15,7 @@ create table addresses (
   id serial primary key,
   public text,
   private text,
+  complete boolean,
   user_id int references users(id),
   game_id int references games(id)
-);
-
-create table games_users (
-  id serial primary key,
-  game_id int references games(id),
-  user_id int references users(id)
 );

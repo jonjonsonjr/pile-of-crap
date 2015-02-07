@@ -1,3 +1,4 @@
+var bitcore = require('bitcore');
 var express = require('express');
 var dust = require('dustjs-linkedin');
 var cons = require('consolidate');
@@ -26,13 +27,26 @@ router.post('/register', function (req, res) {
   var user_id = parseInt(req.body.id);
 
   Games.getLatestGameId(function (err, game_id) {
-    generateKeyPair(user_id, game_id, function (err, address) {
-      if (err) return console.log(err);
+    Addresses.getIncompleteByUser(user_id, function (err, incomplete) {
 
-      console.log(address);
-      res.render('register.dust', {
-        address: address,
-        cost: COST_BTC
+      var addresses = incomplete.filter(function (r) {
+        return r.game_id === game_id;
+      });
+
+      if (addresses.length !== 0) {
+        return res.render('register.dust', {
+          address: addresses[0].address,
+          cost: COST_BTC
+        });
+      }
+
+      generateKeyPair(user_id, game_id, function (err, address) {
+        if (err) return console.log(err);
+
+        return res.render('register.dust', {
+          address: address,
+          cost: COST_BTC
+        });
       });
     });
   });
@@ -68,8 +82,20 @@ router.post('/api/games/:id/winner', function (req, res) {
       winning_address: address,
       winner: user_id
     }, function (err, result) {
-      if (err) return res.json({err: err});
-      res.sendStatus(200);
+      if (err) return res.status(500).json({err: err});
+
+      // get all the completed addresses so we can calculate the payout
+      Games.getAddresses(game_id, function (err, result) {
+        if (err) return res.status(500).json({err: err});
+
+        var sources = result.rows;
+        var destination = address;
+
+        console.log(sources);
+        sendBTC(sources, destination, function () {
+          res.sendStatus(200);
+        });
+      });
     });
   });
 });
@@ -94,19 +120,28 @@ app.use(router);
 app.listen(3000);
 
 function generateKeyPair(user_id, game_id, cb) {
-  var public_key = '1234567';
-  var private_key = 'abcdefg';
+  var private_key = bitcore.PrivateKey();
+  var public_key = private_key.toPublicKey();
+
+  var private_key_str = private_key.toWIF();
+  var public_key_str = public_key.toString();
+
+  var address = public_key.toAddress().toString();
 
   Addresses.create({
     user_id: user_id,
     game_id: game_id,
-    public: public_key,
-    private: private_key
+    public: public_key_str,
+    private: private_key_str
   },
   function (err, result) {
     if (err) return cb(err);
 
-    console.log(result.rows);
-    cb(null, public_key);
+    console.log(address);
+    cb(null, address);
   });
+}
+
+function sendBTC(source_addresses, destination_address) {
+  console.log('send btc to ' + destination_address);
 }

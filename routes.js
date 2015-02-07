@@ -6,7 +6,6 @@ module.exports = function (express) {
   });
   var addresses = require('./controllers/addresses');
   var games = require('./controllers/games');
-  var games_users = require('./controllers/games_users');
   var users = require('./controllers/users');
 
   router.get('/addresses', addresses.index);
@@ -24,14 +23,6 @@ module.exports = function (express) {
   router.post('/games', games.create);
   router.put('/games/:id', games.update);
   router.delete('/games/:id', games.destroy);
-
-  router.get('/games_users', games_users.index);
-  router.get('/games_users/new', games_users.new);
-  router.get('/games_users/:id', games_users.show);
-  router.get('/games_users/:id/edit', games_users.edit);
-  router.post('/games_users', games_users.create);
-  router.put('/games_users/:id', games_users.update);
-  router.delete('/games_users/:id', games_users.destroy);
 
   router.get('/users', users.index);
   router.get('/users/new', users.new);

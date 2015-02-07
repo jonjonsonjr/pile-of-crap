@@ -1,4 +1,5 @@
 var Users = require('../models/users');
+var Addresses = require('../models/addresses');
 var async = require('async');
 var pageSize = 10;
 
@@ -42,22 +43,19 @@ exports.new = function (req, res) {
 
 exports.show = function (req, res) {
 	var id = req.params.id;
-	Users.getByUsername(id, function (err, users) {
+	Users.getByUsername(id, function (err, results) {
 		if (err) {
 			return res.sendStatus(err.code);
 		}
 
-    users.rows = users.rows.map(function (r) {
-      Object.keys(r).forEach(function (key) {
-        if (typeof r[key] === 'boolean') {
-          r[key] = (r[key] === true) ? 'yes' : 'no';
-        }
-      });
+    var user = results.rows[0];
 
-      return r;
+    Addresses.getIncompleteByUser(user.id, function (err, transactions) {
+      user.transactions = {
+        rows: transactions
+      };
+      res.render('users/show.dust', user);
     });
-
-		res.render('users/show.dust', users);
 	});
 };
 

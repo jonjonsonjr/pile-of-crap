@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^0.9.0",
+    "bitcore": "^0.9.5",
     "body-parser": "^1.10.0",
     "consolidate": "^0.10.0",
     "dustjs-linkedin": "^2.5.1",

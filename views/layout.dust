@@ -42,7 +42,6 @@
           <ul class="nav navbar-nav">
             <li><a href="/addresses">Addresses</a></li>
             <li><a href="/games">Games</a></li>
-            <li><a href="/games_users">Games_users</a></li>
             <li><a href="/users">Users</a></li>
           </ul>
         </div><!--/.navbar-collapse -->

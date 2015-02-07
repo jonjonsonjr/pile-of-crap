@@ -8,6 +8,7 @@
     <tr>
       <th>public</th>
       <th>private</th>
+      <th>complete</th>
       <th>user_id</th>
       <th>game_id</th>
     </tr>
@@ -15,6 +16,7 @@
     <tr class="item hand" href="/addresses/{id}">
       <td>{public}</td>
       <td>{private}</td>
+      <td>{complete}</td>
       <td><a href="/users/{user_id}">{users_name}</a></td>
       <td><a href="/games/{game_id}">{games_name}</a></td>
     </tr>

@@ -131,7 +131,7 @@ router.post('/api/addresses/:id/complete', function (req, res) {
 
 app.use(router);
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
 
 function generateKeyPair(user_id, game_id, cb) {
   var private_key = bitcore.PrivateKey();

@@ -1,0 +1,13 @@
+{>layout/}
+{<content}
+		<h2>Games</h2>
+      <div class="form-group">
+          <label for="winning_address">winning_address</label><br>
+					<p id="winning_address">{#rows}{winning_address}{/rows}</p>
+      </div>
+      <div class="form-group">
+          <label for="winner">winner</label><br>
+					<p id="winner">{#rows}<a href="/users/{winner}">{users_name}</a>{/rows}</p>
+      </div>
+			<br>
+{/content}

@@ -1,0 +1,8 @@
+{>layout/}
+{<content}
+    <div class="col-md-6 col-md-offset-3">
+      <h2>Payment</h2>
+      <hr>
+      <p>Send <strong>{cost}</strong> BTC to the following address: <code>{address}</code></p>
+    </div>
+{/content}

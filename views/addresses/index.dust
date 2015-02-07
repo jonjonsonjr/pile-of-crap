@@ -1,0 +1,28 @@
+{>layout/}
+{<content}
+  <h2>Addresses</h2>
+  <p>
+  <a href="/addresses/new" class="btn btn-default">Create new Addresses</a>
+  </p>
+  <table class="table table-striped">
+    <tr>
+      <th>public</th>
+      <th>private</th>
+      <th>user_id</th>
+      <th>game_id</th>
+    </tr>
+    {#rows}
+    <tr class="item hand" href="/addresses/{id}">
+      <td>{public}</td>
+      <td>{private}</td>
+      <td><a href="/users/{user_id}">{users_name}</a></td>
+      <td><a href="/games/{game_id}">{games_name}</a></td>
+    </tr>
+    {/rows}
+  </table>
+<script type="text/javascript">
+window.onload = function () {
+	$('tr').click(function (e) { window.document.location = $(this).attr("href"); });
+};
+</script>
+{/content}

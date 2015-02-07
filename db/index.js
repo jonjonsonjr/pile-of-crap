@@ -1,5 +1,5 @@
 var pg = require('pg');
-var cs = 'postgres://jonjohnson:@localhost/test';
+var cs = process.env.HEROKU_POSTGRESQL_SILVER_URL || 'postgres://jonjohnson:@localhost/test';
 
 module.exports = {
    query: function(text, values, cb) {

@@ -29,8 +29,9 @@ exports.create = function (args, cb) {
   var private = args.private || null;
   var user_id = args.user_id || null;
   var game_id = args.game_id || null;
-	var params = [public,private,user_id,game_id];
-	var query = 'INSERT INTO addresses (public,private,user_id,game_id) VALUES ($1, $2, $3, $4) RETURNING id';
+  var complete = args.complete || false;
+	var params = [public,private,user_id,game_id,complete];
+	var query = 'INSERT INTO addresses (public,private,user_id,game_id,complete) VALUES ($1, $2, $3, $4, $5) RETURNING id';
 	db.query(query, params, function (err, result) {
 		if (err) {
 			return cb(err);
@@ -43,8 +44,12 @@ exports.create = function (args, cb) {
 exports.update = function (id, args, cb) {
   var public = args.public || null;
   var private = args.private || null;
-	var params = [id, public,private,user_id,game_id];
-	var query = 'UPDATE addresses SET (public,private,user_id,game_id) = ($2, $3, $4, $5) WHERE id = $1';
+  var user_id = args.user_id || null;
+  var game_id = args.game_id || null;
+  var complete = args.complete || false;
+
+	var params = [id, public,private,user_id,game_id,complete];
+	var query = 'UPDATE addresses SET (public,private,user_id,game_id,complete) = ($2, $3, $4, $5, $6) WHERE id = $1';
 	db.query(query, params, function (err, result) {
 		if (err) {
 			return cb(err);
@@ -63,4 +68,15 @@ exports.destroy = function (id, cb) {
 
 		cb(null, result);
 	});
+};
+
+exports.getIncomplete = function (cb) {
+  var query = 'SELECT id, public FROM addresses WHERE complete IS false AND addresses.game_id = (SELECT id AS game_id FROM games WHERE games.winner IS NULL ORDER BY id DESC LIMIT 1)';
+	db.query(query, [], cb);
+};
+
+exports.markComplete = function (id, cb) {
+	var params = [id];
+	var query = 'UPDATE addresses SET complete = true WHERE id = $1';
+	db.query(query, params, cb);
 };

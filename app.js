@@ -58,10 +58,8 @@ router.post('/api/games/:id/winner', function (req, res) {
   var game_id = parseInt(req.params.id);
   var username = req.body.winner;
 
-  console.log(username);
-
   Users.getByUsername(username, function(err, result) {
-    if (err) return res.json({err: err});
+    if (err) return res.status(500).json({err: err});
     var user = result.rows[0];
     var user_id = user.id;
     var address = user.address;
@@ -73,6 +71,21 @@ router.post('/api/games/:id/winner', function (req, res) {
       if (err) return res.json({err: err});
       res.sendStatus(200);
     });
+  });
+});
+
+router.get('/api/pending', function (req, res) {
+  Addresses.getIncomplete(function (err, result) {
+    if (err) return res.status(500).send(err);
+    res.json(result.rows);
+  });
+});
+
+router.post('/api/addresses/:id/complete', function (req, res) {
+  var id = parseInt(req.params.id);
+  Addresses.markComplete(id, function (err, result) {
+    if (err) return res.send(err);
+    res.sendStatus(200);
   });
 });
 

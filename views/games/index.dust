@@ -1,24 +1,21 @@
 {>layout/}
 {<content}
   <h2>Games</h2>
-  <p>
-  <a href="/games/new" class="btn btn-default">Create new Games</a>
-  </p>
   <table class="table table-striped">
     <tr>
-      <th>winning_address</th>
-      <th>winner</th>
+      <th>Game</th>
+      <th>Winner</th>
     </tr>
     {#rows}
     <tr class="item hand" href="/games/{id}">
-      <td>{winning_address}</td>
-      <td><a href="/users/{winner}">{users_name}</a></td>
+      <td>{id}</td>
+      <td>{#users_name}<a href="/users/{users_name}">{users_name}</a>{:else}In Progress{/users_name}</td>
     </tr>
     {/rows}
   </table>
 <script type="text/javascript">
 window.onload = function () {
-	$('tr').click(function (e) { window.document.location = $(this).attr("href"); });
+	$('tr.item').click(function (e) { window.document.location = $(this).attr("href"); });
 };
 </script>
 {/content}

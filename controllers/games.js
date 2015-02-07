@@ -60,17 +60,20 @@ exports.show = function (req, res) {
 			return res.sendStatus(err.code);
 		}
 
-    games.rows = games.rows.map(function (r) {
-      Object.keys(r).forEach(function (key) {
-        if (typeof r[key] === 'boolean') {
-          r[key] = (r[key] === true) ? 'yes' : 'no';
-        }
+    var game = games.rows[0];
+
+    Games.getParticipants(id, function (err, results) {
+      var participants = results.rows.map(function (r) {
+        r.complete = (r.complete === true) ? 'Yes' : 'No';
+        return r;
       });
 
-      return r;
-    });
+      game.participants = {
+        rows: participants
+      };
 
-		res.render('games/show.dust', games);
+      res.render('games/show.dust', game);
+    });
 	});
 };
 

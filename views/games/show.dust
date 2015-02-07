@@ -2,12 +2,22 @@
 {<content}
 		<h2>Games</h2>
       <div class="form-group">
-          <label for="winning_address">winning_address</label><br>
-					<p id="winning_address">{#rows}{winning_address}{/rows}</p>
-      </div>
-      <div class="form-group">
-          <label for="winner">winner</label><br>
-					<p id="winner">{#rows}<a href="/users/{winner}">{users_name}</a>{/rows}</p>
+          <label for="winner">Winner</label><br>
+          <p id="winner">{#users_name}<a href="/users/{users_name}">{users_name}</a>{:else}In Progress{/users_name}</p>
       </div>
 			<br>
+      {#participants}
+      <div>
+        <h3>Participants</h3>
+        <table class="table">
+        <tr><th>Username</th><th>Paid?</th></tr>
+        {#rows}
+          <tr>
+            <td>{username}</td>
+            <td>{complete}</td>
+          </tr>
+        {/rows}
+        </table>
+      </div>
+      {/participants}
 {/content}

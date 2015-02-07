@@ -2,25 +2,25 @@
 {<content}
   <h2>Users</h2>
   <p>
-  <a href="/users/new" class="btn btn-default">Create new Users</a>
+  <a href="/users/new" class="btn btn-default">Create New User</a>
   </p>
   <table class="table table-striped">
     <tr>
-      <th>username</th>
-      <th>address</th>
-      <th>capital_one</th>
+      <th>Username</th>
+      <th>Bitcoin Address</th>
+      <!--<th>capital_one</th>-->
     </tr>
     {#rows}
     <tr class="item hand" href="/users/{username}">
       <td>{username}</td>
       <td>{address}</td>
-      <td>{capital_one}</td>
+      <!--<td>{capital_one}</td>-->
     </tr>
     {/rows}
   </table>
 <script type="text/javascript">
 window.onload = function () {
-	$('tr').click(function (e) { window.document.location = $(this).attr("href"); });
+	$('tr.item').click(function (e) { window.document.location = $(this).attr("href"); });
 };
 </script>
 {/content}

@@ -24,7 +24,7 @@
   </table>
 <script type="text/javascript">
 window.onload = function () {
-	$('tr').click(function (e) { window.document.location = $(this).attr("href"); });
+	$('tr.item').click(function (e) { window.document.location = $(this).attr("href"); });
 };
 </script>
 {/content}

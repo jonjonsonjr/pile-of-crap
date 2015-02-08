@@ -107,28 +107,30 @@ router.post('/api/winner/', function (req, res) {
   var username = req.body.winner;
   var diamond = req.body.diamond;
 
-  Users.getByUsername(username, function(err, result) {
-    if (err) return res.status(500).json({err: err});
-    var user = result.rows[0];
-    var user_id = user.id;
-    var address = user.address;
-
-    Games.update(game_id, {
-      winning_address: address,
-      winner: user_id
-    }, function (err, result) {
+  Games.getLatestGameId(function (err, game_id) {
+    Users.getByUsername(username, function(err, result) {
       if (err) return res.status(500).json({err: err});
+      var user = result.rows[0];
+      var user_id = user.id;
+      var address = user.address;
 
-      // get all the completed addresses so we can calculate the payout
-      Games.getAddresses(game_id, function (err, result) {
+      Games.update(game_id, {
+        winning_address: address,
+        winner: user_id
+      }, function (err, result) {
         if (err) return res.status(500).json({err: err});
 
-        var sources = result.rows;
-        var destination = address;
+        // get all the completed addresses so we can calculate the payout
+        Games.getAddresses(game_id, function (err, result) {
+          if (err) return res.status(500).json({err: err});
 
-        console.log(sources);
-        sendBTC(sources, destination, function () {
-          res.sendStatus(200);
+          var sources = result.rows;
+          var destination = address;
+
+          console.log(sources);
+          sendBTC(sources, destination, function () {
+            res.sendStatus(200);
+          });
         });
       });
     });
@@ -178,5 +180,5 @@ function generateKeyPair(user_id, game_id, cb) {
 }
 
 function sendBTC(source_addresses, destination_address) {
-  console.log('send btc to ' + destination_address);
+  console.log('send btc to ' + destination_address + ' from ' + JSON.stringify(source_addresses));
 }

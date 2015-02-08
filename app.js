@@ -1,4 +1,5 @@
 var bitcore = require('bitcore');
+var btc = require('./btc');
 var qrcode = require('express-qrcode');
 var express = require('express');
 var dust = require('dustjs-linkedin');
@@ -11,7 +12,7 @@ var Users = require('./models/users');
 var Games = require('./models/games');
 var Addresses = require('./models/addresses');
 
-var COST_BTC = "0.0001";
+var COST_BTC = "0.001";
 
 app.engine('dust', cons.dust);
 app.set('views', __dirname + '/views');
@@ -127,8 +128,8 @@ router.post('/api/winner/', function (req, res) {
           var sources = result.rows;
           var destination = address;
 
-          console.log(sources);
-          sendBTC(sources, destination, function () {
+          btc.payOut(sources, destination, function (err) {
+            if (err) return res.status(500).json({err: err});
             res.sendStatus(200);
           });
         });

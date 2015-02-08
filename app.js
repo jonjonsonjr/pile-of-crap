@@ -179,6 +179,7 @@ function generateKeyPair(user_id, game_id, cb) {
   });
 }
 
-function sendBTC(source_addresses, destination_address) {
+function sendBTC(source_addresses, destination_address, cb) {
   console.log('send btc to ' + destination_address + ' from ' + JSON.stringify(source_addresses));
+  cb();
 }

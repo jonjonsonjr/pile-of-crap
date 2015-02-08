@@ -1,5 +1,6 @@
 {>layout/}
 {<content}
+<div class="col-md-6 col-md-offset-3">
   <h2>Users</h2>
   <table class="table table-striped">
     <tr>
@@ -15,6 +16,7 @@
     </tr>
     {/rows}
   </table>
+</div>
 <script type="text/javascript">
 window.onload = function () {
 	$('tr.item').click(function (e) { window.document.location = $(this).attr("href"); });

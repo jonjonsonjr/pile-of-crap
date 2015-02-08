@@ -78,6 +78,7 @@ router.post('/api/diamond', function (req, res) {
 
 router.get('/api/players/:username', function (req, res) {
   var username = req.params.username;
+  res.send(username);
 
   Games.getLatestGameId(function (err, game_id) {
     Games.getParticipants(game_id, function (err, results) {

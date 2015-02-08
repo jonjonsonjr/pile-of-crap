@@ -102,9 +102,12 @@ router.get('/api/players/:username', function (req, res) {
   });
 });
 
-router.post('/api/games/:id/winner', function (req, res) {
-  var game_id = parseInt(req.params.id);
+router.post('/api/winner/', function (req, res) {
   var username = req.body.winner;
+  var diamond = req.body.diamond;
+
+  console.log(winner);
+  console.log(diamond);
 
   Users.getByUsername(username, function(err, result) {
     if (err) return res.status(500).json({err: err});
